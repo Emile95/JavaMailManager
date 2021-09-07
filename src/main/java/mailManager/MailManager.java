@@ -13,7 +13,6 @@ public class MailManager {
     private HashMap<Class<?>,MailExpression<?>> mailExpressions;
     private Properties props;
     private Session session;
-    private String from;
     
     public MailManager(Consumer<MailManagerConfiguration> consumer) {
 
@@ -22,7 +21,6 @@ public class MailManager {
 
         props = config.props;
         session = config.session;
-        from = config.from;
 
         mailExpressions = new HashMap<Class<?>,MailExpression<?>>();
         for(MailProfile profile : config.profiles) {
@@ -35,8 +33,12 @@ public class MailManager {
         }
     }
 
-    public <T> void sendMail(T data) {
+    public <T> void sendMail(T data, String[] to) {
+        sendMail(data,null, to);
+    }
+
+    public <T> void sendMail(T data, String from, String[] to) {
         MailExpression<T> expression = (MailExpression<T>)(mailExpressions.get(data.getClass()));
-        expression.sendMail(data, props, session, from);
+        expression.sendMail(data, props, session, from, to);
     }
 }

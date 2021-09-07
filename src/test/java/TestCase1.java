@@ -17,12 +17,10 @@ import mailManager.MailManagerConfiguration;
 import mailManager.MailProfile;
 
 class Mail {
-    String[] to;
     String subject;
     String body;
 
-    public Mail(String[] to, String subject, String body) {
-        this.to = to;
+    public Mail(String subject, String body) {
         this.subject = subject;
         this.body = body;
     }
@@ -31,10 +29,8 @@ class Mail {
 class Profile extends MailProfile {
     public Profile() {
         createMail(Mail.class)
-            .forTo(data -> data.to)
             .forSubject(data -> data.subject)
             .forBody(data -> data.body);
-            
     }
 }
 
@@ -69,32 +65,13 @@ public class TestCase1 {
         MailManager mailManager = new MailManager(config -> {
             config.forPropeties(props);
             config.forSession(session);
-            config.forFrom("desjardins.e@outlook.com");
             config.addProfile(new Profile());
         });
 
         mailManager.sendMail(new Mail(
-            new String[] { "desjardins.e@outlook.com" },
             "Test 1",
             "BROUTILLE !!!!"
-        ));
-    }
-
-    @Test  
-    @DisplayName("Test 2")   
-    void test2() {
-        MailManager mailManager = new MailManager(config -> {
-            config.forPropeties(props);
-            config.forSession(session);
-            config.forFrom("desjardins.e@outlook.com");
-            config.addProfile(new Profile());
-        });
-
-        mailManager.sendMail(new Mail(
-            new String[] { "desjardins.e@outlook.com", "sagefolle@gmail.com" },
-            "Test2",
-            "BROUTILLE !!!!"
-        ));
+        ), new String[] { "desjardins.e@outlook.com" });
     }
 }
 

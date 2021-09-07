@@ -8,23 +8,19 @@ import javax.mail.internet.*;
 
 class MailExpression<T> {
 
-    private Function<T,String[]> toExpression;
     private Function<T,String> subjectExpression;
     private Function<T,String> bodyExpression;
 
-    MailExpression(Function<T,String[]> toExpression, Function<T,String> subjectExpression, Function<T,String> bodyExpression) {
-        this.toExpression = toExpression;
+    MailExpression(Function<T,String> subjectExpression, Function<T,String> bodyExpression) {
         this.subjectExpression = subjectExpression;
         this.bodyExpression = bodyExpression;
     }
 
-    void sendMail(T data, Properties prop, Session session, String from) {
+    void sendMail(T data, Properties prop, Session session, String from, String[] to) {
         try {
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(from));
-            for(String address : toExpression.apply(data)) { 
-                message.addRecipient(Message.RecipientType.TO, new InternetAddress(address));
-            }
+            if(from != null) message.setFrom(new InternetAddress(from));
+            for(String address : to) message.addRecipient(Message.RecipientType.TO, new InternetAddress(address));
             message.setSubject(subjectExpression.apply(data));
             MimeBodyPart mimeBodyPart = new MimeBodyPart();
             mimeBodyPart.setContent(bodyExpression.apply(data), "text/html");

@@ -9,7 +9,6 @@ public class MailManagerConfiguration {
     ArrayList<MailProfile> profiles;
     Properties props;
     Session session;
-    String from;
 
     MailManagerConfiguration() {
         profiles = new ArrayList<MailProfile>();
@@ -22,11 +21,6 @@ public class MailManagerConfiguration {
 
     public MailManagerConfiguration forSession(Session session) {
         this.session = session;
-        return this;
-    }
-
-    public MailManagerConfiguration forFrom(String from) {
-        this.from = from;
         return this;
     }
 
