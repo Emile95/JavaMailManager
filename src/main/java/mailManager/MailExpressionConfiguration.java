@@ -12,11 +12,19 @@ public class MailExpressionConfiguration<T> {
         this.type = type;
     }
 
+    /**
+     * Define the expression that create your subject String depending on object
+     * @param subjectExpression expression who create subject String
+    */
     public MailExpressionConfiguration<T> forSubject(Function<T,String> subjectExpression) {
         this.subjectExpression = subjectExpression;
         return this;
     }
     
+    /**
+     * Define the expression that create your body String depending on object
+     * @param bodyExpression expression who create body String
+    */
     public MailExpressionConfiguration<T> forBody(Function<T,String> bodyExpression) {
         this.bodyExpression = bodyExpression;
         return this;
