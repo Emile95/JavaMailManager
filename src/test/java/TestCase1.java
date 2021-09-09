@@ -6,12 +6,15 @@ import java.util.Properties;
 import java.util.function.Consumer;
 import java.util.List;
 
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
 import javax.mail.*;
 import java.lang.Iterable;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import mailManager.FileAttachment;
 import mailManager.MailManager;
 import mailManager.MailManagerConfiguration;
 import mailManager.MailProfile;
@@ -72,6 +75,45 @@ public class TestCase1 {
             "Test 1",
             "BROUTILLE !!!!"
         ), new String[] { "desjardins.e@outlook.com" });
+    }
+
+    @Test                                               
+    @DisplayName("Test 2")   
+    void test2() {
+        MailManager mailManager = new MailManager(config -> {
+            config.forPropeties(props);
+            config.forSession(session);
+            config.addProfile(new Profile());
+        });
+
+        mailManager.sendMail(new Mail(
+                "Test 2",
+                "BROUTILLE !!!!"
+            ), 
+            new String[] { "desjardins.e@outlook.com" },
+            new DataSource[] { new FileDataSource("lettre_motivation.pdf"), new FileDataSource("CV 2021_Émile Desjardins.pdf") }
+        );
+    }
+
+    @Test                                               
+    @DisplayName("Test 3")   
+    void test3() {
+        MailManager mailManager = new MailManager(config -> {
+            config.forPropeties(props);
+            config.forSession(session);
+            config.addProfile(new Profile());
+        });
+        
+        mailManager.sendMail(new Mail(
+                "Test 3",
+                "BROUTILLE !!!!"
+            ), 
+            new String[] { "desjardins.e@outlook.com" },
+            new FileAttachment[] { 
+                new FileAttachment(new FileDataSource("lettre_motivation.pdf"),"fileName.pdf"), 
+                new FileAttachment(new FileDataSource("CV 2021_Émile Desjardins.pdf"), "fileName2.pdf") 
+            }
+        );
     }
 }
 
